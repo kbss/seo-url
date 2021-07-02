@@ -1,7 +1,7 @@
 package com.stylight.seo;
 
 import com.stylight.seo.domain.UrlService;
-import com.stylight.seo.repository.DBStub;
+import com.stylight.seo.repository.InMemoryRepository;
 import com.stylight.seo.service.InMemoryUrlService;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Bean;
 public class ServiceTestConfiguration {
 
     @Bean
-    public DBStub repository() {
-        return new DBStub();
+    public InMemoryRepository repository() {
+        return new InMemoryRepository();
     }
 
     @Bean
-    public UrlService urlService(DBStub service) {
+    public UrlService urlService(InMemoryRepository service) {
         return new InMemoryUrlService(service);
     }
 

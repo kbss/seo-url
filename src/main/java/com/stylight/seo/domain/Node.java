@@ -12,6 +12,7 @@ import java.util.Map;
 public class Node {
 
     private String value;
+    private String url;
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private Map<String, Node> partsMap = new HashMap<>();

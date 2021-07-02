@@ -2,7 +2,7 @@ package com.stylight.seo.service;
 
 import com.stylight.seo.domain.Node;
 import com.stylight.seo.domain.UrlService;
-import com.stylight.seo.repository.DBStub;
+import com.stylight.seo.repository.InMemoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 public class InMemoryUrlService implements UrlService {
     public static final String QUERY_PREFIX = "?";
     public static final String QUERY_SEPARATOR = "&";
-    private final DBStub repository;
+    private final InMemoryRepository repository;
     //TODO: Externalize
     private double coverThreshold = 0.5;
     private Node root;
 
-    public InMemoryUrlService(DBStub repository) {
+    public InMemoryUrlService(InMemoryRepository repository) {
         this.repository = repository;
     }
 
@@ -39,7 +39,9 @@ public class InMemoryUrlService implements UrlService {
 
     private String findByParametrizedUrl(String parametrizedUrl) {
         log.debug("Searching by parametrized url: {}", parametrizedUrl);
-        return findBestMatchByParametrizedUrl(parametrizedUrl);
+        String bestMatchByParametrizedUrl = findBestMatchByParametrizedUrl(parametrizedUrl);
+        log.info("Url: {}", bestMatchByParametrizedUrl);
+        return bestMatchByParametrizedUrl;
     }
 
     @Override
@@ -64,21 +66,21 @@ public class InMemoryUrlService implements UrlService {
             if (current == null) {
                 log.debug("Can't find exact url: {}", part);
                 if (bestMatch == null) break;
-                return buildPrettyPartialUrl(urlParts, i, bestMatch.getValue(), parametrizedUrl);
+                return buildPrettyPartialUrl(urlParts, i, bestMatch.getUrl(), parametrizedUrl);
             } else {
-                if (current.getValue() != null) {
+                if (current.getUrl() != null) {
                     bestMatch = current;
                 }
-                log.debug("Found url: {}", current.getValue());
+                log.debug("Found url: {}", current.getUrl());
             }
         }
         if (bestMatch == null) return parametrizedUrl;
-        return bestMatch.getValue();
+        return bestMatch.getUrl();
     }
 
     private String buildPrettyPartialUrl(List<String> urlParts, int lastMatchIndex, String partialUrl, String parametrizedFullUrl) {
         StringBuilder sb = new StringBuilder();
-        if (!urlParts.contains(QUERY_PREFIX)) {
+        if (!partialUrl.contains(QUERY_PREFIX)) {
             sb.append(QUERY_PREFIX);
         }
         for (int i = lastMatchIndex; i < urlParts.size(); i++) {
@@ -113,7 +115,7 @@ public class InMemoryUrlService implements UrlService {
                 current = current.addChild(part);
             }
             if (current != root) {
-                current.setValue(parametrizedUrl);
+                current.setUrl(prettyUrl);
             }
         });
         log.info("Loading urls from database is done!");
