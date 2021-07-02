@@ -20,10 +20,8 @@ public class SeoUrlTest {
 
     @Test
     public void testUrl() {
-
         service.getPrettyUrls(Collections.singletonList("/products"));
         service.getPrettyUrls(Collections.singletonList("/products?gender=leamfe&tag=123&tag=1234&tag=5678"));
-
     }
 
     //TODO: implement
