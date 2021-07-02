@@ -1,0 +1,14 @@
+<configuration debug="true">
+    <property scope="local" name="ENCODER_PATTERN"
+              value="%d{HH:mm:ss.SSS} %highlight(%-5level) [%thread] %yellow(%X{requestId}) %X{url} %magenta([%logger{36}]) - %msg %n"/>
+    <property scope="local" name="LOGS_HOME" value="app-logs/"/>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${ENCODER_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
