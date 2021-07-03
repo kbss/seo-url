@@ -42,6 +42,8 @@ public class TreeUrlService {
         StringBuilder sb = new StringBuilder();
         if (!partialUrl.contains(QUERY_PREFIX)) {
             sb.append(QUERY_PREFIX);
+        } else {
+            sb.append(QUERY_SEPARATOR);
         }
         for (int i = lastMatchIndex; i < urlParts.size(); i++) {
             String s = urlParts.get(i);
@@ -83,9 +85,13 @@ public class TreeUrlService {
         return bestMatch.getUrl();
     }
 
-
-    //TODO: abstract
-    public List<String> splitUrl(String url) {
+    /**
+     * Splits given url by query params
+     *
+     * @param url
+     * @return
+     */
+    private List<String> splitUrl(String url) {
         return UrlUtils.splitParametrizedUrl(url);
     }
 

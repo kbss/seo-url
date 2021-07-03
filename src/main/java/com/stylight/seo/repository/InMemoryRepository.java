@@ -25,10 +25,11 @@ public class InMemoryRepository {
         put("/products?brand=123", "/Adidas/");
     }};
 
-
     @PostConstruct
     public void postConstruct() {
         parameterizedUrsMapping = loadFromFile();
+//        Map<String, String> collect = parameterizedUrsMapping.entrySet().stream().collect(Collectors.toMap(e -> e.getValue(), e -> e.getKey()));
+//        parameterizedUrsMapping.putAll(collect);
     }
 
     public Map<String, String> loadFromFile() {
@@ -36,7 +37,7 @@ public class InMemoryRepository {
         try {
             ClassLoader classLoader = getClass().getClassLoader();
             Map<String, String> collect = new BufferedReader(
-                    new InputStreamReader( classLoader.getResourceAsStream(DATA_FILE), StandardCharsets.UTF_8))
+                    new InputStreamReader(classLoader.getResourceAsStream(DATA_FILE), StandardCharsets.UTF_8))
                     .lines()
                     .map(l -> l.split(","))
                     .collect(Collectors.toMap(s -> s[0], s -> s[1]));
