@@ -1,5 +1,6 @@
 package com.stylight.seo.domain;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public interface UrlService {
      * @param urls
      * @return
      */
-    Map<String, String> getPrettyUrls(List<String> urls);
+    Map<String, String> getPrettyUrls(Collection<String> urls);
 
     /**
      * Receives a list of  pretty URLs, and returns a map of provided pretty URLs as keys and corresponding
@@ -21,6 +22,6 @@ public interface UrlService {
      * @param urls
      * @return
      */
-    Map<String, String> getFullUrl(List<String> urls);
+    Map<String, String> getFullUrl(Collection<String> urls);
 
 }

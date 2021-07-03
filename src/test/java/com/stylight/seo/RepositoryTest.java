@@ -1,7 +1,10 @@
 package com.stylight.seo;
 
 import com.stylight.seo.repository.InMemoryRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 public class RepositoryTest {
 
@@ -9,9 +12,8 @@ public class RepositoryTest {
 
     @Test
     public void testExactMatch() {
-//        Optional<String> exactPretty = repository.findExactByParametrizedUrl("/products?brand=123");
-//        Assertions.assertTrue(exactPretty.isPresent());
-//        Assertions.assertEquals("/Adidas/", exactPretty.get());
+        Map<String, String> all = repository.findAll();
+        Assertions.assertFalse(all.isEmpty());
     }
 
 }

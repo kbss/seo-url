@@ -1,6 +1,7 @@
 package com.stylight.seo.service;
 
 import com.stylight.seo.domain.Node;
+import com.stylight.seo.domain.exception.NullUrlException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class InMemoryParametrizedUrlService {
+public class TreeUrlService {
 
     public static final String QUERY_PREFIX = "?";
     public static final String QUERY_SEPARATOR = "&";
@@ -17,7 +18,7 @@ public class InMemoryParametrizedUrlService {
 
     private Node root;
 
-    public InMemoryParametrizedUrlService() {
+    public TreeUrlService() {
         root = new Node();
     }
 
@@ -56,6 +57,9 @@ public class InMemoryParametrizedUrlService {
     }
 
     public String findBestMatchByParametrizedUrl(String parametrizedUrl) {
+        if (parametrizedUrl == null) {
+            throw new NullUrlException();
+        }
         List<String> urlParts = splitUrl(parametrizedUrl);
         Node current = root;
         Node bestMatch = null;

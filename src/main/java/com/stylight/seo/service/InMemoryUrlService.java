@@ -7,31 +7,31 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.AbstractMap;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-
+//TODO: caching
 @Slf4j
 @Service
 public class InMemoryUrlService implements UrlService {
     private final InMemoryRepository repository;
-    private InMemoryParametrizedUrlService parametrizedUrlService;
-    private InMemoryParametrizedUrlService prettyUrlService;
+    private TreeUrlService parametrizedUrlService;
+    private TreeUrlService prettyUrlService;
 
     public InMemoryUrlService(InMemoryRepository repository) {
         this.repository = repository;
-        parametrizedUrlService = new InMemoryParametrizedUrlService();
-        prettyUrlService = new InMemoryParametrizedUrlService();
+        parametrizedUrlService = new TreeUrlService();
+        prettyUrlService = new TreeUrlService();
     }
 
     @Override
-    public Map<String, String> getPrettyUrls(List<String> urls) {
+    public Map<String, String> getPrettyUrls(Collection<String> urls) {
         return findAll(urls, (u) -> parametrizedUrlService.findBestMatchByParametrizedUrl(u));
     }
 
-    private Map<String, String> findAll(List<String> urls, Function<String, String> function) {
+    private Map<String, String> findAll(Collection<String> urls, Function<String, String> function) {
         Map<String, String> collect = urls
                 .parallelStream()
                 .map(url -> new AbstractMap.SimpleEntry<>(url, function.apply(url)))
@@ -40,7 +40,7 @@ public class InMemoryUrlService implements UrlService {
     }
 
     @Override
-    public Map<String, String> getFullUrl(List<String> urls) {
+    public Map<String, String> getFullUrl(Collection<String> urls) {
         return findAll(urls, (u) -> prettyUrlService.findBestMatchByParametrizedUrl(u));
     }
 
