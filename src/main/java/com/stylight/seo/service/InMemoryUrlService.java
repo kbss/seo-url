@@ -17,13 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class InMemoryUrlService implements UrlService {
     private final InMemoryRepository repository;
-    private TreeUrlService parametrizedUrlService;
-    private TreeUrlService prettyUrlService;
+    private final TreeUrlService parametrizedUrlService;
 
-    public InMemoryUrlService(InMemoryRepository repository) {
+    public InMemoryUrlService(InMemoryRepository repository, TreeUrlService parametrizedUrlService) {
         this.repository = repository;
-        parametrizedUrlService = new TreeUrlService();
-        prettyUrlService = new TreeUrlService();
+        this.parametrizedUrlService = parametrizedUrlService;
     }
 
     @Override
@@ -35,13 +33,13 @@ public class InMemoryUrlService implements UrlService {
         Map<String, String> collect = urls
                 .parallelStream()
                 .map(url -> new AbstractMap.SimpleEntry<>(url, function.apply(url)))
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (k1, k2) -> k1));
         return collect;
     }
 
     @Override
-    public Map<String, String> getFullUrl(Collection<String> urls) {
-        return findAll(urls, (u) -> prettyUrlService.findBestMatchByParametrizedUrl(u));
+    public Map<String, String> getParametrizedUrl(Collection<String> urls) {
+        return findAll(urls, (u) -> parametrizedUrlService.findBestMatchByParametrizedUrl(u));
     }
 
     @PostConstruct
@@ -56,7 +54,8 @@ public class InMemoryUrlService implements UrlService {
             String parametrizedUrl = e.getKey();
             String prettyUrl = e.getValue();
             parametrizedUrlService.addNewNode(parametrizedUrl, prettyUrl);
-            prettyUrlService.addNewNode(prettyUrl, parametrizedUrl);
+            parametrizedUrlService.addNewNode(prettyUrl, parametrizedUrl);
+//            prettyUrlService.addNewNode(prettyUrl, parametrizedUrl);
         });
     }
 }

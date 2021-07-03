@@ -22,6 +22,6 @@ public interface UrlService {
      * @param urls
      * @return
      */
-    Map<String, String> getFullUrl(Collection<String> urls);
+    Map<String, String> getParametrizedUrl(Collection<String> urls);
 
 }

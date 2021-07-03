@@ -1,7 +1,9 @@
 package com.stylight.seo.controller;
 
 import com.stylight.seo.domain.UrlService;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -16,14 +18,13 @@ public class PrettyUrlController {
         this.service = service;
     }
 
-    @GetMapping("pretty")
-    public Map<String, String> getPrettyUrls(List<String> parametrizedUrls) {
+    @PostMapping(path = "pretty", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> getPrettyUrls(@RequestBody List<String> parametrizedUrls) {
         return service.getPrettyUrls(parametrizedUrls);
     }
 
-    @GetMapping(path = "parametrized")
-    public Map<String, String> getFullUrl(List<String> prettyUrls) {
-        //TODO: return
-        return service.getFullUrl(prettyUrls);
+    @PostMapping(path = "parametrized", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, String> getFullUrl(@RequestBody List<String> prettyUrls) {
+        return service.getParametrizedUrl(prettyUrls);
     }
 }

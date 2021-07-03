@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+    <defaultCache maxElementsInMemory="10000" timeToLiveSeconds="3600" overflowToDisk="true"/>
+
+<!--    <cache name="WEB3J_CLIENTS" maxElementsInMemory="1" timeToLiveSeconds="300" overflowToDisk="false"/>-->
+<!--    <cache name="CACHED_OPTIONS" maxElementsInMemory="1000" timeToLiveSeconds="60" overflowToDisk="false"/>-->
+<!--    <cache name="WEB3J_BLOCK_NUM" maxElementsInMemory="1" timeToLiveSeconds="20" overflowToDisk="false"/>-->
+<!--    <cache name="GAS_PRICE" maxElementsInMemory="1" timeToLiveSeconds="5" overflowToDisk="false"/>-->
+
+</ehcache>

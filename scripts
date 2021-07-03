@@ -1,0 +1,5 @@
+//Parse brands
+var brands = $x("//*/span[contains(@class, 'filters__list__name')]");
+for(var i = 0;i<brands.length;i++) {
+console.log(brands[i].outerText)
+}

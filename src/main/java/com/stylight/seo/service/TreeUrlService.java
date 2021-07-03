@@ -3,6 +3,7 @@ package com.stylight.seo.service;
 import com.stylight.seo.domain.Node;
 import com.stylight.seo.domain.exception.NullUrlException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,11 +57,13 @@ public class TreeUrlService {
         return sb.toString();
     }
 
-    public String findBestMatchByParametrizedUrl(String parametrizedUrl) {
-        if (parametrizedUrl == null) {
+
+    @Cacheable(cacheNames = "cacheUrl", key = "#url")
+    public String findBestMatchByParametrizedUrl(String url) {
+        if (url == null) {
             throw new NullUrlException();
         }
-        List<String> urlParts = splitUrl(parametrizedUrl);
+        List<String> urlParts = splitUrl(url);
         Node current = root;
         Node bestMatch = null;
         for (int i = 0; i < urlParts.size(); i++) {
@@ -69,14 +72,14 @@ public class TreeUrlService {
             if (current == null) {
                 log.debug("Can't find exact url: {}", part);
                 if (bestMatch == null) break;
-                return buildPartialUrl(urlParts, i, bestMatch.getUrl(), parametrizedUrl);
+                return buildPartialUrl(urlParts, i, bestMatch.getUrl(), url);
             } else {
                 if (current.getUrl() != null) {
                     bestMatch = current;
                 }
             }
         }
-        if (bestMatch == null) return parametrizedUrl;
+        if (bestMatch == null) return url;
         return bestMatch.getUrl();
     }
 
