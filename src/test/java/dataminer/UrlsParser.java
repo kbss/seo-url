@@ -18,7 +18,7 @@ public class UrlsParser {
     public static final String DOMAIN = "https://www.stylight.com";
     private static final String URL = "https://www.stylight.com/sitemap.xml?mapType=search&pageNumber=";
     private static final int MAX_PAGE = 174;
-    private Pattern URL_PATTERN = Pattern.compile("<loc>(.*)<\\/loc>");
+    private final Pattern URL_PATTERN = Pattern.compile("<loc>(.*)<\\/loc>");
 
     public static void main(String[] args) {
         new UrlsParser().loadFromNet();

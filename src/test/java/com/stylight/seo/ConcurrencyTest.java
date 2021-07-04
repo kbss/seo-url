@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ConcurrencyTest {
-    private Logger log = LoggerFactory.getLogger(ConcurrencyTest.class);
+    private final Logger log = LoggerFactory.getLogger(ConcurrencyTest.class);
 
     @Autowired
     private UrlService urlService;
@@ -76,7 +76,4 @@ public class ConcurrencyTest {
         return list;
     }
 
-    public void execute() {
-
-    }
 }

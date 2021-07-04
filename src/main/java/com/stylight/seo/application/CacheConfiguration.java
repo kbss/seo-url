@@ -12,15 +12,14 @@ import org.springframework.core.io.ClassPathResource;
 @EnableCaching
 @Configuration
 public class CacheConfiguration {
+
     public static final String PARAMETRIZED_URL = "parametrizedUrl";
     public static final String PRETTY_URL = "prettyUrl";
-
 
     @Bean
     public CacheManager cacheManager() {
         return new EhCacheCacheManager(ehCacheCacheManager().getObject());
     }
-
 
     @Bean
     public EhCacheManagerFactoryBean ehCacheCacheManager() {

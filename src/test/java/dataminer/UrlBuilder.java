@@ -25,9 +25,10 @@ public class UrlBuilder {
         put("men", "male");
         put("women", "female");
     }};
-    private Set<String> excludeSet = new HashSet<>() {{
+    private final Set<String> excludeSet = new HashSet<>() {{
         add("/Fashion/");
     }};
+    int maxLength = 0;
     private int brandCount = 1;
     private int tagCount = 1;
 
@@ -59,10 +60,12 @@ public class UrlBuilder {
                 String parametrizedUrls = parseUrl(url);
                 if (StringUtils.isNotBlank(parametrizedUrls)) {
                     urlsMap.put(parametrizedUrls, url);
+                    maxLength = Math.max(parametrizedUrls.length(), url.length());
                     sb.append(parametrizedUrls).append(",").append(url).append("\n");
                 }
             }
         }
+        System.out.println("Max length: " + maxLength);
         try {
             FileUtils.write(new File("urls-mapping.list"), sb.toString(), StandardCharsets.UTF_8.name());
         } catch (IOException e) {

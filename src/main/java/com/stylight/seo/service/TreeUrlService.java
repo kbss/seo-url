@@ -4,6 +4,7 @@ import com.stylight.seo.application.CacheConfiguration;
 import com.stylight.seo.domain.Node;
 import com.stylight.seo.domain.ValidationService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +17,15 @@ public class TreeUrlService {
     public static final String QUERY_PREFIX = "?";
     public static final String QUERY_SEPARATOR = "&";
     private final ValidationService validationService;
-    //TODO: Externalize
-    private double coverThreshold = 0.5;
-    private Node parametrizedUrlsRoot;
-    private Node prettyUrlsRoot;
+    private final Node parametrizedUrlsRoot;
+    private final Node prettyUrlsRoot;
+    private double coverThreshold;
 
-    public TreeUrlService(ValidationService validationService) {
+    public TreeUrlService(ValidationService validationService, @Value("${url.cover.threshold:0.5}") double coverThreshold) {
         parametrizedUrlsRoot = new Node();
         prettyUrlsRoot = new Node();
         this.validationService = validationService;
+        this.coverThreshold = coverThreshold;
     }
 
     public void addNewParametrizedNode(String url, String alias) {
@@ -87,7 +88,7 @@ public class TreeUrlService {
         Node bestMatch = null;
         for (int i = 0; i < urlParts.size(); i++) {
             String part = urlParts.get(i);
-            current = current.getByParametrizedUrl(part);
+            current = current.getByUrl(part);
             if (current == null) {
                 log.debug("Can't find exact url: {}", part);
                 if (bestMatch == null) break;

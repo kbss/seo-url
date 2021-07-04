@@ -85,7 +85,7 @@ public class UrlServiceTest {
 
     @Test
     public void testHalfUrlCover() {
-        String url = "/products?gender=female&tag=x123&tag=x1234&tag=x5678";
+        String url = "/products?brand=127gender=female&tag=12123&tag=991234&tag=x5678";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
         AssertionUtils.assertValidSingleResult(url, prettyUrls);
     }

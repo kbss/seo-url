@@ -19,12 +19,12 @@ public class RestClient implements AutoCloseable {
     private Client client;
     private WebTarget target;
 
-    private String endpoint;
+    private final String endpoint;
     private ClientBuilder builder;
-    private PoolingHttpClientConnectionManager connectionManager;
-    private ClientConfig configuration;
-    private List<Object> components = new ArrayList<>();
-    private List<Class<?>> classes = new ArrayList<>();
+    private final PoolingHttpClientConnectionManager connectionManager;
+    private final ClientConfig configuration;
+    private final List<Object> components = new ArrayList<>();
+    private final List<Class<?>> classes = new ArrayList<>();
 
     public RestClient(String endpoint) {
         configuration = new ClientConfig();

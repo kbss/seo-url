@@ -22,7 +22,7 @@ public class Node {
         return partsMap.computeIfAbsent(urlPart, n -> childNode);
     }
 
-    public Node getByParametrizedUrl(String parametrizedUrlPart) {
-        return partsMap.get(parametrizedUrlPart);
+    public Node getByUrl(String urlPart) {
+        return partsMap.get(urlPart);
     }
 }

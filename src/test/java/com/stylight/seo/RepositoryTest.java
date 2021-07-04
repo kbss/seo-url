@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class RepositoryTest {
 
-    private InMemoryRepository repository = new InMemoryRepository();
+    private final InMemoryRepository repository = new InMemoryRepository();
 
     @Test
     public void testExactMatch() {
