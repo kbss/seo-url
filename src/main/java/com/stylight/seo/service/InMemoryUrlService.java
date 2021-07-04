@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-//TODO: caching
 @Slf4j
 @Service
 public class InMemoryUrlService implements UrlService {
