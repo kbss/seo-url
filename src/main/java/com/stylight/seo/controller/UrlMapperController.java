@@ -18,12 +18,12 @@ public class UrlMapperController {
         this.service = service;
     }
 
-    @PostMapping(path = "pretty", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "pretty", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> getPrettyUrls(@RequestBody List<String> parametrizedUrls) {
         return service.getPrettyUrls(parametrizedUrls);
     }
 
-    @PostMapping(path = "parametrized", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "parametrized", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, String> getFullUrl(@RequestBody List<String> prettyUrls) {
         return service.getParametrizedUrl(prettyUrls);
     }
