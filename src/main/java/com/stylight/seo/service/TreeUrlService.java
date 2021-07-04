@@ -15,10 +15,9 @@ public class TreeUrlService {
 
     public static final String QUERY_PREFIX = "?";
     public static final String QUERY_SEPARATOR = "&";
+    private final ValidationService validationService;
     //TODO: Externalize
     private double coverThreshold = 0.5;
-
-    private final ValidationService validationService;
     private Node parametrizedUrlsRoot;
     private Node prettyUrlsRoot;
 
@@ -28,13 +27,21 @@ public class TreeUrlService {
         this.validationService = validationService;
     }
 
-    public void addNewNode(String url, String alias) {
+    public void addNewParametrizedNode(String url, String alias) {
+        addNewNode(parametrizedUrlsRoot, url, alias);
+    }
+
+    public void addNewPrettyNode(String url, String alias) {
+        addNewNode(prettyUrlsRoot, url, alias);
+    }
+
+    private void addNewNode(Node root, String url, String alias) {
         List<String> strings = splitUrl(url);
-        Node current = parametrizedUrlsRoot;
+        Node current = root;
         for (String part : strings) {
             current = current.addChild(part);
         }
-        if (current != parametrizedUrlsRoot) {
+        if (current != root) {
             current.setUrl(alias);
         }
     }

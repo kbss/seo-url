@@ -18,7 +18,7 @@ public class RestParametrizedUrlTests extends BaseRestTest {
     @Test
     public void prettyUrlSingleUrlFullMatchTest() {
         String url = "/products?brand=19&color=21&tag=18";
-        String expected = "/Patent-Leather-Shoes/White/Business/";
+        String expected = "/products?brand=19&color=21&tag=18";
         getParametrizedUrl(url, expected);
     }
 

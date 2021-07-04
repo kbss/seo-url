@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @SpringBootTest
 public class UrlServiceTest {
 
-    private Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
+    private final Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
     @Autowired
     private UrlService service;
 
@@ -67,6 +67,13 @@ public class UrlServiceTest {
         String url = "/products?brand=4757&tag=6&tag=5678&tag=9877";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
         AssertionUtils.assertValidSingleResult("/Asyou/Dresses/?tag=5678&tag=9877", prettyUrls);
+    }
+
+    @Test
+    public void testGetPrettyUlrByPrettyUrl() {
+        String url = "/Asyou/Dresses/";
+        Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
+        AssertionUtils.assertValidSingleResult("/Asyou/Dresses/", prettyUrls);
     }
 
     @Test
@@ -123,11 +130,9 @@ public class UrlServiceTest {
         batchTest(all, p -> service.getPrettyUrls(p));
     }
 
-
     @Test
     public void testGetParametrizedUrlsBatch() {
         Map<String, String> all = inMemoryRepository.findAll();
-        log.info("All: {}", all);
         batchTest(invert(all), p -> service.getParametrizedUrl(p));
     }
 

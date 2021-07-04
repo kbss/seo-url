@@ -23,12 +23,39 @@ public class CacheTest {
 
     @Test
     public void testPrettyUrlCache() {
-        String url = "/products?brand=784&color=24&tag=43";
+        String url = "/Summer-Pants/Gray/Hipster/";
+        String expectedResult = "/products?brand=784&color=24&tag=43";
+
+        assertCacheIsNull(url, CacheConfiguration.PRETTY_URL);
+
         Map<String, String> prettyUrls = service.getParametrizedUrl(Collections.singletonList(url));
-        String expectedResult = "/Summer-Pants/Gray/Hipster/";
+
         AssertionUtils.assertValidSingleResult(expectedResult, prettyUrls);
-        String cachedValue = cacheManager.getCache(CacheConfiguration.PARAMETRIZED_URL).get(url, String.class);
+        String cachedValue = assertCacheFilled(url, CacheConfiguration.PRETTY_URL);
         Assertions.assertNotNull(cachedValue);
         Assertions.assertEquals(expectedResult, cachedValue);
+    }
+
+    private String assertCacheFilled(String url, String prettyUrl) {
+        return cacheManager.getCache(prettyUrl).get(url, String.class);
+    }
+
+    @Test
+    public void testParametrizedUrlCache() {
+        String url = "/products?brand=520&tag=29&tag=97";
+        String expectedResult = "/Gemstone-Rings/Gold/Wedding-Guest/";
+
+        assertCacheIsNull(url, CacheConfiguration.PARAMETRIZED_URL);
+
+        Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
+        AssertionUtils.assertValidSingleResult(expectedResult, prettyUrls);
+        String cachedValue = assertCacheFilled(url, CacheConfiguration.PARAMETRIZED_URL);
+        Assertions.assertNotNull(cachedValue);
+        Assertions.assertEquals(expectedResult, cachedValue);
+    }
+
+    private void assertCacheIsNull(String url, String parametrizedUrl) {
+        String cachedValueBeforeCall = cacheManager.getCache(parametrizedUrl).get(url, String.class);
+        Assertions.assertNull(cachedValueBeforeCall);
     }
 }

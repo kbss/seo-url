@@ -39,7 +39,7 @@ public class InMemoryUrlService implements UrlService {
 
     @Override
     public Map<String, String> getParametrizedUrl(Collection<String> urls) {
-        return findAll(urls, (u) -> parametrizedUrlService.findBestMatchByParametrizedUrl(u));
+        return findAll(urls, (u) -> parametrizedUrlService.findBestMatchByPrettyUrl(u));
     }
 
     @PostConstruct
@@ -53,9 +53,8 @@ public class InMemoryUrlService implements UrlService {
         urlsMap.entrySet().forEach(e -> {
             String parametrizedUrl = e.getKey();
             String prettyUrl = e.getValue();
-            parametrizedUrlService.addNewNode(parametrizedUrl, prettyUrl);
-            parametrizedUrlService.addNewNode(prettyUrl, parametrizedUrl);
-//            prettyUrlService.addNewNode(prettyUrl, parametrizedUrl);
+            parametrizedUrlService.addNewParametrizedNode(parametrizedUrl, prettyUrl);
+            parametrizedUrlService.addNewPrettyNode(prettyUrl, parametrizedUrl);
         });
     }
 }
