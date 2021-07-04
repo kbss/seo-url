@@ -17,6 +17,7 @@ Make sure that gradlew executable:
 ### 1. Run Application without build
 
 Command:
+
 ```shell
 gradlew bootRun
 ```
@@ -25,17 +26,30 @@ gradlew bootRun
 
 #### Prerequisites:
 
-Make sure that docker installed
+Make sure that Docker is installed.
 
 #### Build application container image:
 
-```
+```shell
 docker build -t seo-url-app .
 ```
 
 #### Start application container:
 
-```
-docker run -dp 8080:8080 seo-url-app .
+### 3. Run tests
 
+```shell
+gradlew test 
 ```
+
+##### Reports:
+
+* Test results:
+  ```
+  build/reports/tests/test/index.html
+  ```
+
+* Test coverage report:
+  ```
+  build/reports/jacoco/test/html/jacoco-sessions.html
+  ```

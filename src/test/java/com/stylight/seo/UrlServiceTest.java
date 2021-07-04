@@ -30,9 +30,9 @@ public class UrlServiceTest {
 
     @Test
     public void testPartialSearch() {
-        String url = "/products?brand=427&tag=12296&tag=5678";
+        String url = "/products?brand=1468&tag=12296&tag=5678";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        AssertionUtils.assertValidSingleResult("/Givenchy/?tag=12296&tag=5678", prettyUrls);
+        AssertionUtils.assertValidSingleResult("/Korres/?tag=12296&tag=5678", prettyUrls);
     }
 
     @Test
@@ -61,9 +61,9 @@ public class UrlServiceTest {
 
     @Test
     public void testPartialSearch2() {
-        String url = "/products?brand=4757&tag=6&tag=5678&tag=9877";
+        String url = "/products?brand=1456&tag=5678&tag=9877";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        AssertionUtils.assertValidSingleResult("/Asyou/Dresses/?tag=5678&tag=9877", prettyUrls);
+        AssertionUtils.assertValidSingleResult("/Solid-Striped/?tag=5678&tag=9877", prettyUrls);
     }
 
     @Test
@@ -90,16 +90,16 @@ public class UrlServiceTest {
 
     @Test
     public void testPrettyUrlSearch() {
-        String url = "/Summer-Pants/Gray/Hipster/";
+        String url = "/Wildfox/Clothing/Women/";
         Map<String, String> prettyUrls = service.getParametrizedUrl(Collections.singletonList(url));
-        AssertionUtils.assertValidSingleResult("/products?brand=784&color=24&tag=43", prettyUrls);
+        AssertionUtils.assertValidSingleResult("/products?brand=1480&gender=female&tag=4", prettyUrls);
     }
 
     @Test
     public void testPartialPrettyUrlSearch() {
-        String url = "/The-Addams-Family/Clothing/?tag=5678";
+        String url = "/Dries-Van-Noten/Clothing/?tag=5678";
         Map<String, String> resultUrl = service.getParametrizedUrl(Collections.singletonList(url));
-        AssertionUtils.assertValidSingleResult("/products?brand=4756&tag=4&tag=5678", resultUrl);
+        AssertionUtils.assertValidSingleResult("/products?brand=780&tag=4&tag=5678", resultUrl);
     }
 
     private Map<String, String> invert(Map<String, String> map) {
@@ -138,9 +138,7 @@ public class UrlServiceTest {
     }
 
     private void testAllOneByOne(Map<String, String> urlsMap, Function<List<String>, Map<String, String>> function) {
-        urlsMap.entrySet().forEach(e -> {
-            String parametrizedUrl = e.getKey();
-            String expectedResult = e.getValue();
+        urlsMap.forEach((parametrizedUrl, expectedResult) -> {
             Map<String, String> urls = function.apply(Collections.singletonList(parametrizedUrl));
             AssertionUtils.assertValidSingleResult(expectedResult, urls);
         });

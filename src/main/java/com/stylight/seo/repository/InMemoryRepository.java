@@ -35,10 +35,7 @@ public class InMemoryRepository implements UrlRepository {
                     .lines()
                     .map(l -> l.split(","))
                     .collect(Collectors.toMap(s -> s[0], s -> s[1]));
-
-
             log.debug("Loading data completed, size: {}", collect.size());
-
             parameterizedUrslMapping = collect;
             prettyUrlsMapping = parameterizedUrslMapping.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
         } catch (Exception e) {

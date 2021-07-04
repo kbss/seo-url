@@ -24,8 +24,8 @@ public class RestParametrizedUrlTests extends BaseRestTest {
 
     @Test
     public void prettyUrlSingleUrlPartialMatchTest() {
-        String url = "/Fiorelli/Handbags/Black/";
-        String expected = "/products?brand=4357&color=18&tag=11";
+        String url = "/Vans/Casual-T-Shirts/Blue/?tag=1001";
+        String expected = "/products?brand=292&color=6&tag=41&tag=1001";
         getParametrizedUrl(url, expected);
     }
 

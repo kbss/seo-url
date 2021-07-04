@@ -50,9 +50,7 @@ public class InMemoryUrlService implements UrlService {
     }
 
     public void loadFromDatabase(Map<String, String> urlsMap) {
-        urlsMap.entrySet().forEach(e -> {
-            String parametrizedUrl = e.getKey();
-            String prettyUrl = e.getValue();
+        urlsMap.forEach((parametrizedUrl, prettyUrl) -> {
             parametrizedUrlService.addNewParametrizedNode(parametrizedUrl, prettyUrl);
             parametrizedUrlService.addNewPrettyNode(prettyUrl, parametrizedUrl);
         });

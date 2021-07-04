@@ -24,8 +24,8 @@ public class CacheTest {
 
     @Test
     public void testPrettyUrlCache() {
-        String url = "/Summer-Pants/Gray/Hipster/";
-        String expectedResult = "/products?brand=784&color=24&tag=43";
+        String url = "/Sun-Hats/Outdoor/";
+        String expectedResult = "/products?brand=1527&tag=51";
 
         assertCacheIsNull(url, CacheConfiguration.PRETTY_URL);
 
@@ -45,8 +45,8 @@ public class CacheTest {
 
     @Test
     public void testParametrizedUrlCache() {
-        String url = "/products?brand=520&tag=29&tag=97";
-        String expectedResult = "/Gemstone-Rings/Gold/Wedding-Guest/";
+        String url = "/products?brand=579&color=30&tag=119";
+        String expectedResult = "/Lilly-Pulitzer/Short-Pants/Pink/";
 
         assertCacheIsNull(url, CacheConfiguration.PARAMETRIZED_URL);
 

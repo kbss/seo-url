@@ -25,16 +25,16 @@ public class RepositoryTest {
 
     @Test
     public void findByPrettyUrl() {
-        Optional<String> byParametrizedUrl = repository.findByParametrizedUrl("/products?brand=135&gender=female&tag=293");
+        Optional<String> byParametrizedUrl = repository.findByParametrizedUrl("/products?brand=377&gender=female&tag=125");
         Assertions.assertTrue(byParametrizedUrl.isPresent());
-        Assertions.assertEquals("/Jworld/Duffle-Bags/Women/", byParametrizedUrl.get());
+        Assertions.assertEquals("/Outlander/Hoodies/Women/", byParametrizedUrl.get());
     }
 
     @Test
     public void findByParametrizedUrl() {
-        Optional<String> prettyUrl = repository.findByPrettyUrl("/Jworld/Duffle-Bags/Women/");
+        Optional<String> prettyUrl = repository.findByPrettyUrl("/Vests/Black/1950s/");
         Assertions.assertTrue(prettyUrl.isPresent());
-        Assertions.assertEquals("/products?brand=135&gender=female&tag=293", prettyUrl.get());
+        Assertions.assertEquals("/products?brand=640&color=18&tag=147", prettyUrl.get());
     }
 
 }
