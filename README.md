@@ -56,7 +56,7 @@ gradlew clean test
 
 * Test coverage report:
 
-> build/reports/jacoco/test/html/jacoco-sessions.html
+> build/reports/jacoco/test/html/index.html
 
 ### 6. Run application in docker container
 
