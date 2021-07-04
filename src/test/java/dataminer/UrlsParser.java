@@ -18,7 +18,7 @@ public class UrlsParser {
     public static final String DOMAIN = "https://www.stylight.com";
     private static final String URL = "https://www.stylight.com/sitemap.xml?mapType=search&pageNumber=";
     private static final int MAX_PAGE = 174;
-    private final Pattern URL_PATTERN = Pattern.compile("<loc>(.*)<\\/loc>");
+    private final Pattern URL_PATTERN = Pattern.compile("<loc>(.*)</loc>");
 
     public static void main(String[] args) {
         new UrlsParser().loadFromNet();
@@ -29,7 +29,7 @@ public class UrlsParser {
         for (int i = 0; i < MAX_PAGE; i++) {
             allUrls.addAll(loadData(i));
         }
-        String collect = allUrls.stream().collect(Collectors.joining("\n"));
+        String collect = String.join("\n", allUrls);
 
         try {
             FileUtils.write(new File("urls.list"), collect, StandardCharsets.UTF_8.name());

@@ -2,6 +2,7 @@ package com.stylight.seo.service;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,11 +19,9 @@ public class UrlUtils {
         List<String> set = new LinkedList<>();
         set.add(split[0]);
         String queryPart = split[1];
-        if (queryPart != null && StringUtils.isNotBlank(queryPart)) {
+        if (StringUtils.isNotBlank(queryPart)) {
             String[] querySplit = queryPart.split(QUERY_SEPARATOR);
-            for (String query : querySplit) {
-                set.add(query);
-            }
+            set.addAll(Arrays.asList(querySplit));
         }
         return set;
     }

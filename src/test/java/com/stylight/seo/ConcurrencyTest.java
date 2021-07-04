@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ConcurrencyTest {
+    public static final int SIZE = 50;
     private final Logger log = LoggerFactory.getLogger(ConcurrencyTest.class);
 
     @Autowired
@@ -38,7 +39,7 @@ public class ConcurrencyTest {
         AtomicLong maxTime = new AtomicLong(0L);
         AtomicLong avgTime = new AtomicLong(0L);
         AtomicLong minTime = new AtomicLong(Long.MAX_VALUE);
-        List<Map<String, String>> maps = buildData(50);
+        List<Map<String, String>> maps = buildData();
 
         for (int i = 0; i < iterationsCount; i++) {
             service.submit(() -> {
@@ -58,18 +59,18 @@ public class ConcurrencyTest {
         log.info("Execution time: {} - {}, avg: {}", minTime, maxTime, avgTime.get() / iterationsCount);
     }
 
-    private List<Map<String, String>> buildData(int size) {
-        List<Map<String, String>> list = new ArrayList<>(size);
+    private List<Map<String, String>> buildData() {
+        List<Map<String, String>> list = new ArrayList<>(SIZE);
         Map<String, String> urlsMap = inMemoryRepository.findAll();
         int requestSize = 100;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < SIZE; i++) {
             int shift = ThreadLocalRandom.current().nextInt(urlsMap.size() - requestSize);
             Map<String, String> collect = urlsMap
                     .entrySet()
                     .stream()
                     .skip(shift)
                     .limit(requestSize)
-                    .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
             list.add(collect);
         }

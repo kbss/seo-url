@@ -16,21 +16,20 @@ import java.util.List;
 
 public class RestClient implements AutoCloseable {
 
-    private Client client;
-    private WebTarget target;
-
     private final String endpoint;
-    private ClientBuilder builder;
     private final PoolingHttpClientConnectionManager connectionManager;
     private final ClientConfig configuration;
     private final List<Object> components = new ArrayList<>();
     private final List<Class<?>> classes = new ArrayList<>();
+    private Client client;
+    private WebTarget target;
+    private ClientBuilder builder;
 
     public RestClient(String endpoint) {
         configuration = new ClientConfig();
         connectionManager = new PoolingHttpClientConnectionManager();
-        connectionManager.setDefaultMaxPerRoute(5);
-        connectionManager.setMaxTotal(10);
+        connectionManager.setDefaultMaxPerRoute(100);
+        connectionManager.setMaxTotal(100);
         configuration.property(ApacheClientProperties.CONNECTION_MANAGER, connectionManager);
         configuration.property(ApacheClientProperties.DISABLE_COOKIES, true);
         configuration.property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);
@@ -55,15 +54,10 @@ public class RestClient implements AutoCloseable {
         return WebResourceFactory.newResource(clazz, target);
     }
 
-    public WebTarget getTarget() {
-        return target;
-    }
-
     public RestClient register(Object obj) {
         components.add(obj);
         return this;
     }
-
 
     @Override
     public void close() {
@@ -76,7 +70,7 @@ public class RestClient implements AutoCloseable {
             if (client != null) {
                 client.close();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -85,7 +79,7 @@ public class RestClient implements AutoCloseable {
             if (connectionManager != null) {
                 connectionManager.close();
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 

@@ -26,20 +26,19 @@ public class InMemoryUrlService implements UrlService {
 
     @Override
     public Map<String, String> getPrettyUrls(Collection<String> urls) {
-        return findAll(urls, (u) -> parametrizedUrlService.findBestMatchByParametrizedUrl(u));
+        return findAll(urls, parametrizedUrlService::findBestMatchByParametrizedUrl);
     }
 
     private Map<String, String> findAll(Collection<String> urls, Function<String, String> function) {
-        Map<String, String> collect = urls
+        return urls
                 .parallelStream()
                 .map(url -> new AbstractMap.SimpleEntry<>(url, function.apply(url)))
-                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue(), (k1, k2) -> k1));
-        return collect;
+                .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue, (k1, k2) -> k1));
     }
 
     @Override
     public Map<String, String> getParametrizedUrl(Collection<String> urls) {
-        return findAll(urls, (u) -> parametrizedUrlService.findBestMatchByPrettyUrl(u));
+        return findAll(urls, parametrizedUrlService::findBestMatchByPrettyUrl);
     }
 
     @PostConstruct

@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import java.util.Objects;
+
 
 @EnableCaching
 @Configuration
@@ -18,15 +20,15 @@ public class CacheConfiguration {
 
     @Bean
     public CacheManager cacheManager() {
-        return new EhCacheCacheManager(ehCacheCacheManager().getObject());
+        return new EhCacheCacheManager(Objects.requireNonNull(ehCacheCacheManager().getObject()));
     }
 
     @Bean
     public EhCacheManagerFactoryBean ehCacheCacheManager() {
-        EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
-        cmfb.setConfigLocation(new ClassPathResource("config/ehcache.xml"));
-        cmfb.setShared(true);
-        return cmfb;
+        EhCacheManagerFactoryBean factory = new EhCacheManagerFactoryBean();
+        factory.setConfigLocation(new ClassPathResource("config/ehcache.xml"));
+        factory.setShared(true);
+        return factory;
     }
 
 }

@@ -19,7 +19,7 @@ public class TreeUrlService {
     private final ValidationService validationService;
     private final Node parametrizedUrlsRoot;
     private final Node prettyUrlsRoot;
-    private double coverThreshold;
+    private final double coverThreshold;
 
     public TreeUrlService(ValidationService validationService, @Value("${url.cover.threshold:0.5}") double coverThreshold) {
         parametrizedUrlsRoot = new Node();
@@ -63,12 +63,12 @@ public class TreeUrlService {
             sb.append(s).append(QUERY_SEPARATOR);
         }
         //Delete last added QUERY_SEPARATOR
-        sb = sb.deleteCharAt(sb.length() - 1);
+        sb.deleteCharAt(sb.length() - 1);
         if (isBiggestPartOfUrlCovered(parametrizedFullUrl, sb.length())) {
             log.debug("Url didn't cover half of url, returning original url");
             return parametrizedFullUrl;
         }
-        sb = sb.insert(0, partialUrl);
+        sb.insert(0, partialUrl);
         return sb.toString();
     }
 
@@ -106,8 +106,8 @@ public class TreeUrlService {
     /**
      * Splits given url by query params
      *
-     * @param url
-     * @return
+     * @param url URL path
+     * @return list of url parts split by query separator '&'
      */
     private List<String> splitUrl(String url) {
         return UrlUtils.splitParametrizedUrl(url);

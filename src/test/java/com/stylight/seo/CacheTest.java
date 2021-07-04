@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 
 import java.util.Collections;
@@ -37,7 +38,9 @@ public class CacheTest {
     }
 
     private String assertCacheFilled(String url, String prettyUrl) {
-        return cacheManager.getCache(prettyUrl).get(url, String.class);
+        Cache cache = cacheManager.getCache(prettyUrl);
+        Assertions.assertNotNull(cache);
+        return cache.get(url, String.class);
     }
 
     @Test
@@ -55,7 +58,9 @@ public class CacheTest {
     }
 
     private void assertCacheIsNull(String url, String parametrizedUrl) {
-        String cachedValueBeforeCall = cacheManager.getCache(parametrizedUrl).get(url, String.class);
+        Cache cache = cacheManager.getCache(parametrizedUrl);
+        Assertions.assertNotNull(cache);
+        String cachedValueBeforeCall = cache.get(url, String.class);
         Assertions.assertNull(cachedValueBeforeCall);
     }
 }

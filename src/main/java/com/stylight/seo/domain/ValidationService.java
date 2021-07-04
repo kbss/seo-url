@@ -6,7 +6,7 @@ public interface ValidationService {
     /**
      * Validation given url
      *
-     * @param url
+     * @param url URL path
      */
     void validateUrl(String url) throws UrlValidationException;
 }

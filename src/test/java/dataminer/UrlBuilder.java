@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class UrlBuilder {
 
@@ -49,17 +48,14 @@ public class UrlBuilder {
         }
     }
 
-    public Map<String, String> parseData() {
-        Map<String, String> urlsMap = new HashMap<>();
+    public void parseData() {
         StringBuilder sb = new StringBuilder();
         List<String> strings = loadUrlsFromFile();
-        for (int i = 0; i < strings.size(); i++) {
-            String url = strings.get(i);
+        for (String url : strings) {
             if (excludeSet.contains(url)) continue;
             if (url.startsWith("/")) {
                 String parametrizedUrls = parseUrl(url);
                 if (StringUtils.isNotBlank(parametrizedUrls)) {
-                    urlsMap.put(parametrizedUrls, url);
                     maxLength = Math.max(parametrizedUrls.length(), url.length());
                     sb.append(parametrizedUrls).append(",").append(url).append("\n");
                 }
@@ -71,7 +67,6 @@ public class UrlBuilder {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return urlsMap;
     }
 
     private String getColor(String str) {
@@ -119,7 +114,7 @@ public class UrlBuilder {
                 tags.add(TAG + id);
             }
         }
-        tag = tags.stream().collect(Collectors.joining("&"));
+        tag = String.join("&", tags);
         StringBuilder sb = new StringBuilder("/products?");
         appendUrl(brandCode, sb, "brand=");
         appendUrl(genderCode, sb, "gender=");
@@ -138,9 +133,9 @@ public class UrlBuilder {
         return string;
     }
 
-    private StringBuilder appendUrl(String brandCode, StringBuilder sb, String s) {
-        if (StringUtils.isBlank(brandCode)) return sb;
-        return sb.append(s).append(brandCode).append("&");
+    private void appendUrl(String brandCode, StringBuilder sb, String s) {
+        if (StringUtils.isBlank(brandCode)) return;
+        sb.append(s).append(brandCode).append("&");
     }
 
     private List<String> loadUrlsFromFile() {

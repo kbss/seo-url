@@ -7,8 +7,6 @@ import com.stylight.seo.util.AssertionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,7 +22,6 @@ import java.util.stream.Collectors;
 @SpringBootTest
 public class UrlServiceTest {
 
-    private final Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
     @Autowired
     private UrlService service;
 
@@ -106,12 +103,16 @@ public class UrlServiceTest {
     }
 
     private Map<String, String> invert(Map<String, String> map) {
-        return map.entrySet().stream().limit(200).collect(Collectors.toMap(e -> e.getValue(), e -> e.getKey()));
+        return map.entrySet().stream().limit(200).collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
     }
 
     @Test
     public void testGetPrettyUrls() {
-        Map<String, String> all = inMemoryRepository.findAll().entrySet().stream().limit(10000).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+        Map<String, String> all = inMemoryRepository.findAll()
+                .entrySet()
+                .stream()
+                .limit(10000)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         testAllOneByOne(all, p -> service.getPrettyUrls(p));
     }
 
