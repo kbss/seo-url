@@ -166,3 +166,7 @@ Redis is a good solution.
 * Using cache (store all 1M records) will need an extra 4Gb to store search results.
 
 The total amount of memory needed: 9Gb per instance.
+
+P.S:
+
+Code includes 50K Generated URL pair
