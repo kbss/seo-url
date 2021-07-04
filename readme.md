@@ -2,6 +2,12 @@
 
 * java 11
 
+### Used:
+
+* Gradle
+* Spring boot
+* ehcache
+
 ## How to:
 
 ### Run application
@@ -22,6 +28,28 @@ Command:
 gradlew bootRun
 ```
 
+### 2. Build application with tests
+
+```shell
+gradlew clean build
+```
+
+### 3. Run only tests
+
+```shell
+gradlew clean test 
+```
+
+### 5. Reports:
+
+* Test results:
+
+> build/reports/tests/test/index.html
+
+* Test coverage report:
+
+> build/reports/jacoco/test/html/jacoco-sessions.html
+
 ### 2. Run application in docker container
 
 #### Prerequisites:
@@ -29,6 +57,8 @@ gradlew bootRun
 Make sure that Docker is installed.
 
 #### Build application container image:
+
+* Build application if
 
 ```shell
 docker build -t seo-url-app .
@@ -40,27 +70,11 @@ docker build -t seo-url-app .
 docker run -dp 8080:8080 seo-url-app .
 ```
 
-### 3. Run tests
-
-```shell
-gradlew clean test 
-```
-
-##### Reports:
-
-* Test results:
-
-> build/reports/tests/test/index.html
-
-* Test coverage report:
-
-> build/reports/jacoco/test/html/jacoco-sessions.html
-
 ## Design
 
 According to requirements assuming that data should be loaded in memory. The best solution for partial search will be Tree.
 
-1. Load All url mapping in memory
+1. Load All URL mapping in memory
 1. Build trees for key and value
 
 1. To do that we have to split url to a parts
@@ -82,7 +96,14 @@ According to requirements assuming that data should be loaded in memory. The bes
    tag=1234 - > /Women/Shoes/ 
 
    ```
-1. Last node will hold mapped url
+1. Last node will hold mapped url.
+1. For partial URL search will hold last node with URL.
+   1. if no such node return original URL
+   1. otherwise, build a new URL from the last node + rest part of URL
+   1. check URL coverage
+
+   - if it less than configured threshold return original URL
+   - otherwise, return the built URL
 
 !["Url Tree"](tree.jpg )
 
@@ -107,8 +128,29 @@ Minimum memory requirements for holding 1M URLs will be 5Gb
 
 ### Caching:
 
-To improve performance we can use caching
+To improve performance, we can use caching.
 
-For using cache (store all 1M records) will be needed extra 4Gb to store search results.
+#### Shared cache:
 
+Redis is a good solution.
 
+**pros:**
+
+* no extra memory needed on the url-service instances
+
+**cons:**
+
+* Increase infrastructure overheads
+* Bit Lower performance because of network latency
+
+#### Local cache:
+
+**pros:**
+
+* No network lags
+
+**cons:**
+
+* Using cache (store all 1M records) will need an extra 4Gb to store search results.
+
+The total amount of memory needed: 9Gb per instance.

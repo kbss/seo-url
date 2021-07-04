@@ -38,7 +38,6 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
 
 	testImplementation group: 'org.glassfish.jersey.ext', name: 'jersey-proxy-client', version: "${jerseyVersion}"
