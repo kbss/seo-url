@@ -1,18 +1,16 @@
 package com.stylight.seo;
 
 import com.stylight.seo.domain.UrlService;
-import com.stylight.seo.domain.exception.NullUrlException;
+import com.stylight.seo.domain.exception.UrlValidationException;
 import com.stylight.seo.repository.InMemoryRepository;
 import com.stylight.seo.util.AssertionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,8 +21,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 
-@ExtendWith(SpringExtension.class)
-@Import(ServiceTestConfiguration.class)
+@SpringBootTest
 public class UrlServiceTest {
 
     private Logger log = LoggerFactory.getLogger(UrlServiceTest.class);
@@ -57,12 +54,12 @@ public class UrlServiceTest {
 
     @Test
     public void testPrettyNullUrl() {
-        Assertions.assertThrows(NullUrlException.class, () -> service.getPrettyUrls(Collections.singletonList(null)));
+        Assertions.assertThrows(UrlValidationException.class, () -> service.getPrettyUrls(Collections.singletonList(null)));
     }
 
     @Test
     public void testParametrizedUrl() {
-        Assertions.assertThrows(NullUrlException.class, () -> service.getParametrizedUrl(Collections.singletonList(null)));
+        Assertions.assertThrows(UrlValidationException.class, () -> service.getParametrizedUrl(Collections.singletonList(null)));
     }
 
     @Test
@@ -107,7 +104,7 @@ public class UrlServiceTest {
 
     @Test
     public void testGetPrettyUrls() {
-        Map<String, String> all = inMemoryRepository.findAll();
+        Map<String, String> all = inMemoryRepository.findAll().entrySet().stream().limit(10000).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
         testAllOneByOne(all, p -> service.getPrettyUrls(p));
     }
 

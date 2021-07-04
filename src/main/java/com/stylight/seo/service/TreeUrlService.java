@@ -2,7 +2,7 @@ package com.stylight.seo.service;
 
 import com.stylight.seo.application.CacheConfiguration;
 import com.stylight.seo.domain.Node;
-import com.stylight.seo.domain.exception.NullUrlException;
+import com.stylight.seo.domain.ValidationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,19 +18,23 @@ public class TreeUrlService {
     //TODO: Externalize
     private double coverThreshold = 0.5;
 
-    private Node root;
+    private final ValidationService validationService;
+    private Node parametrizedUrlsRoot;
+    private Node prettyUrlsRoot;
 
-    public TreeUrlService() {
-        root = new Node();
+    public TreeUrlService(ValidationService validationService) {
+        parametrizedUrlsRoot = new Node();
+        prettyUrlsRoot = new Node();
+        this.validationService = validationService;
     }
 
     public void addNewNode(String url, String alias) {
         List<String> strings = splitUrl(url);
-        Node current = root;
+        Node current = parametrizedUrlsRoot;
         for (String part : strings) {
             current = current.addChild(part);
         }
-        if (current != root) {
+        if (current != parametrizedUrlsRoot) {
             current.setUrl(alias);
         }
     }
@@ -60,14 +64,19 @@ public class TreeUrlService {
         return sb.toString();
     }
 
-
-    @Cacheable(cacheNames = CacheConfiguration.PARAMETRIZED_URL, key = "#url")
+    @Cacheable(cacheNames = CacheConfiguration.PARAMETRIZED_URL, condition = "#url != null", key = "#url")
     public String findBestMatchByParametrizedUrl(String url) {
-        if (url == null) {
-            throw new NullUrlException();
-        }
+        return findBestMatch(url, parametrizedUrlsRoot);
+    }
+
+    @Cacheable(cacheNames = CacheConfiguration.PRETTY_URL, condition = "#url != null", key = "#url")
+    public String findBestMatchByPrettyUrl(String url) {
+        return findBestMatch(url, prettyUrlsRoot);
+    }
+
+    private String findBestMatch(String url, Node current) {
+        validationService.validateUrl(url);
         List<String> urlParts = splitUrl(url);
-        Node current = root;
         Node bestMatch = null;
         for (int i = 0; i < urlParts.size(); i++) {
             String part = urlParts.get(i);

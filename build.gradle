@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.stylight'
@@ -17,15 +18,21 @@ configurations {
 repositories {
 	mavenCentral()
 }
-//def jerseyVersion = '3.0.2'
+
+test {
+	finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+}
+
 def jerseyVersion = '2.23.2'
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation group: 'net.sf.ehcache', name: 'ehcache', version: '2.10.9.2'
-
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
 
 
 	compileOnly 'org.projectlombok:lombok'
@@ -33,10 +40,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testImplementation group: 'commons-io', name: 'commons-io', version: '2.10.0'
-
-//	testImplementation group: 'org.glassfish.jersey.ext', name: 'jersey-proxy-client', version: "${jerseyVersion}"
-	// https://mvnrepository.com/artifact/jakarta.ws.rs/jakarta.ws.rs-api
-//	testImplementation group: 'jakarta.ws.rs', name: 'jakarta.ws.rs-api', version: '3.0.0'
 
 	testImplementation group: 'org.glassfish.jersey.ext', name: 'jersey-proxy-client', version: "${jerseyVersion}"
 	testImplementation group: 'org.glassfish.jersey.core', name: 'jersey-client', version: "${jerseyVersion}"

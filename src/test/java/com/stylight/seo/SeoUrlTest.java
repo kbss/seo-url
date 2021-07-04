@@ -3,16 +3,13 @@ package com.stylight.seo;
 import com.stylight.seo.domain.UrlService;
 import com.stylight.seo.service.UrlUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Collections;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
-@Import(ServiceTestConfiguration.class)
+@SpringBootTest
 public class SeoUrlTest {
 
     @Autowired

@@ -4,12 +4,10 @@ import com.stylight.seo.domain.UrlService;
 import com.stylight.seo.repository.InMemoryRepository;
 import com.stylight.seo.util.AssertionUtils;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-@ExtendWith(SpringExtension.class)
-@Import(ServiceTestConfiguration.class)
+@SpringBootTest
 public class ConcurrencyTest {
     private Logger log = LoggerFactory.getLogger(ConcurrencyTest.class);
 
@@ -33,7 +30,7 @@ public class ConcurrencyTest {
     private InMemoryRepository inMemoryRepository;
 
     @Test
-    public void testSummationWithConcurrency() throws InterruptedException {
+    public void concurrencyTest() throws InterruptedException {
         int iterationsCount = 100_000;
         ExecutorService service = Executors.newFixedThreadPool(50);
         CountDownLatch latch = new CountDownLatch(iterationsCount);
