@@ -1,7 +1,7 @@
 package com.stylight.seo.service;
 
+import com.stylight.seo.domain.UrlRepository;
 import com.stylight.seo.domain.UrlService;
-import com.stylight.seo.repository.InMemoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,35 +16,36 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class InMemoryUrlService implements UrlService {
-    private final InMemoryRepository repository;
+    private final UrlRepository inMemoryRepository;
     private final TreeUrlService parametrizedUrlService;
 
-    public InMemoryUrlService(InMemoryRepository repository, TreeUrlService parametrizedUrlService) {
-        this.repository = repository;
+    public InMemoryUrlService(UrlRepository inMemoryRepository, TreeUrlService parametrizedUrlService) {
+        this.inMemoryRepository = inMemoryRepository;
         this.parametrizedUrlService = parametrizedUrlService;
     }
 
     @Override
     public Map<String, String> getPrettyUrls(Collection<String> urls) {
-        return findAll(urls, parametrizedUrlService::findBestMatchByParametrizedUrl);
+        return findAll(urls, u -> inMemoryRepository.findByParametrizedUrl(u).orElse(parametrizedUrlService.findBestMatchByParametrizedUrl(u)));
     }
 
     private Map<String, String> findAll(Collection<String> urls, Function<String, String> function) {
-        return urls
+        Map<String, String> map = urls
                 .parallelStream()
                 .map(url -> new AbstractMap.SimpleEntry<>(url, function.apply(url)))
                 .collect(Collectors.toMap(AbstractMap.SimpleEntry::getKey, AbstractMap.SimpleEntry::getValue, (k1, k2) -> k1));
+        return map;
     }
 
     @Override
     public Map<String, String> getParametrizedUrl(Collection<String> urls) {
-        return findAll(urls, parametrizedUrlService::findBestMatchByPrettyUrl);
+        return findAll(urls, u -> inMemoryRepository.findByPrettyUrl(u).orElse(parametrizedUrlService.findBestMatchByPrettyUrl(u)));
     }
 
     @PostConstruct
     private void posConstruct() {
         log.info("Loading urls from database...");
-        loadFromDatabase(repository.findAll());
+        loadFromDatabase(inMemoryRepository.findAll());
         log.info("Loading urls from database is done!");
     }
 
