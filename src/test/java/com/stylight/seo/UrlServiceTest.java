@@ -3,6 +3,7 @@ package com.stylight.seo;
 import com.stylight.seo.domain.UrlService;
 import com.stylight.seo.domain.exception.NullUrlException;
 import com.stylight.seo.repository.InMemoryRepository;
+import com.stylight.seo.util.AssertionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,10 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -39,21 +38,21 @@ public class UrlServiceTest {
     public void testPartialSearch() {
         String url = "/products?brand=427&tag=12296&tag=5678";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        assertValidResult("/Givenchy/?tag=12296&tag=5678", prettyUrls);
+        AssertionUtils.assertValidSingleResult("/Givenchy/?tag=12296&tag=5678", prettyUrls);
     }
 
     @Test
     public void testPartialSearchSingleSlash() {
         String url = "/";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        assertValidResult(url, prettyUrls);
+        AssertionUtils.assertValidSingleResult(url, prettyUrls);
     }
 
     @Test
     public void testPartialSearchEmptyUrl() {
         String url = StringUtils.EMPTY;
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        assertValidResult(url, prettyUrls);
+        AssertionUtils.assertValidSingleResult(url, prettyUrls);
     }
 
     @Test
@@ -70,21 +69,21 @@ public class UrlServiceTest {
     public void testPartialSearch2() {
         String url = "/products?brand=4757&tag=6&tag=5678&tag=9877";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        assertValidResult("/Asyou/Dresses/?tag=5678&tag=9877", prettyUrls);
+        AssertionUtils.assertValidSingleResult("/Asyou/Dresses/?tag=5678&tag=9877", prettyUrls);
     }
 
     @Test
     public void testNonExistingUrl() {
         String url = "/orders?gender=female";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        assertValidResult(url, prettyUrls);
+        AssertionUtils.assertValidSingleResult(url, prettyUrls);
     }
 
     @Test
     public void testHalfUrlCover() {
         String url = "/products?gender=female&tag=x123&tag=x1234&tag=x5678";
         Map<String, String> prettyUrls = service.getPrettyUrls(Collections.singletonList(url));
-        assertValidResult(url, prettyUrls);
+        AssertionUtils.assertValidSingleResult(url, prettyUrls);
     }
 
 
@@ -92,14 +91,14 @@ public class UrlServiceTest {
     public void testPrettyUrlSearch() {
         String url = "/Summer-Pants/Gray/Hipster/";
         Map<String, String> prettyUrls = service.getParametrizedUrl(Collections.singletonList(url));
-        assertValidResult("/products?brand=784&color=24&tag=43", prettyUrls);
+        AssertionUtils.assertValidSingleResult("/products?brand=784&color=24&tag=43", prettyUrls);
     }
 
     @Test
     public void testPartialPrettyUrlSearch() {
         String url = "/The-Addams-Family/Clothing/?tag=5678";
         Map<String, String> resultUrl = service.getParametrizedUrl(Collections.singletonList(url));
-        assertValidResult("/products?brand=4756&tag=4&tag=5678", resultUrl);
+        AssertionUtils.assertValidSingleResult("/products?brand=4756&tag=4&tag=5678", resultUrl);
     }
 
     private Map<String, String> invert(Map<String, String> map) {
@@ -140,13 +139,13 @@ public class UrlServiceTest {
             String parametrizedUrl = e.getKey();
             String expectedResult = e.getValue();
             Map<String, String> urls = function.apply(Collections.singletonList(parametrizedUrl));
-            assertValidResult(expectedResult, urls);
+            AssertionUtils.assertValidSingleResult(expectedResult, urls);
         });
     }
 
     private void batchTest(Map<String, String> urlsMap, Function<Collection<String>, Map<String, String>> function) {
         int requestSize = 100;
-        int shift =  ThreadLocalRandom.current().nextInt(urlsMap.size() - requestSize);
+        int shift = ThreadLocalRandom.current().nextInt(urlsMap.size() - requestSize);
         Collection<String> keys = urlsMap.keySet().stream().skip(shift).limit(requestSize).collect(Collectors.toList());
         Map<String, String> urls = function.apply(keys);
 
@@ -159,10 +158,4 @@ public class UrlServiceTest {
     }
 
 
-    private void assertValidResult(String expectedResult, Map<String, String> urls) {
-        Iterator<Map.Entry<String, String>> iterator = urls.entrySet().iterator();
-        Assertions.assertTrue(iterator.hasNext());
-        Map.Entry<String, String> next = iterator.next();
-        Assertions.assertEquals(expectedResult, next.getValue());
-    }
 }

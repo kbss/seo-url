@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class PrettyUrlController {
+public class UrlMapperController {
 
     private final UrlService service;
 
-    public PrettyUrlController(UrlService service) {
+    public UrlMapperController(UrlService service) {
         this.service = service;
     }
 

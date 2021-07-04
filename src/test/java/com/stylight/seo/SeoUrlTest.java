@@ -18,6 +18,7 @@ public class SeoUrlTest {
     @Autowired
     private UrlService service;
 
+    //TODO: implement
     @Test
     public void testUrl() {
         service.getPrettyUrls(Collections.singletonList("/products"));
