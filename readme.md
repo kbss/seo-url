@@ -1,3 +1,9 @@
+#### Preamble:
+
+Neo4j would ideally fit this task.
+
+I'm assuming that you're expecting an in-memory solution with the custom data structure.
+
 ### Requirements
 
 * java 11
@@ -58,7 +64,13 @@ Make sure that Docker is installed.
 
 #### Build application container image:
 
-* Build application if
+* Build application:
+
+```shell
+gradlew clean build
+```
+
+* Build image:
 
 ```shell
 docker build -t seo-url-app .
