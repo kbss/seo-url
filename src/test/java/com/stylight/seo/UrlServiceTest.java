@@ -149,7 +149,10 @@ public class UrlServiceTest {
         Collection<String> keys = urlsMap.keySet().stream().skip(shift).limit(requestSize).collect(Collectors.toList());
         Map<String, String> urls = function.apply(keys);
 
-        log.info(" {} ", urls);
+        assertEach(urlsMap, keys, urls);
+    }
+
+    private void assertEach(Map<String, String> urlsMap, Collection<String> keys, Map<String, String> urls) {
         keys.forEach(key -> {
             String resultUrl = urls.get(key);
             Assertions.assertNotNull(resultUrl);

@@ -1,6 +1,7 @@
 package com.stylight.seo.rest;
 
 import com.stylight.seo.SeoUrlApplication;
+import com.stylight.seo.rest.client.RestClient;
 import com.stylight.seo.rest.resource.UrlTestResource;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,5 +1,6 @@
 package com.stylight.seo.service;
 
+import com.stylight.seo.application.CacheConfiguration;
 import com.stylight.seo.domain.Node;
 import com.stylight.seo.domain.exception.NullUrlException;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +61,7 @@ public class TreeUrlService {
     }
 
 
-    @Cacheable(cacheNames = "cacheUrl", key = "#url")
+    @Cacheable(cacheNames = CacheConfiguration.PARAMETRIZED_URL, key = "#url")
     public String findBestMatchByParametrizedUrl(String url) {
         if (url == null) {
             throw new NullUrlException();

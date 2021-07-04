@@ -20,4 +20,11 @@ public class AssertionUtils {
         Assertions.assertEquals(expectedKey, next.getKey());
         Assertions.assertEquals(expectedValue, next.getValue());
     }
+
+    public static void assertEach(Map<String, String> source, Map<String, String> result) {
+        result.forEach((key, value) -> {
+            Assertions.assertNotNull(value);
+            Assertions.assertEquals(source.get(key), value);
+        });
+    }
 }

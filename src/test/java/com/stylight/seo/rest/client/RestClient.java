@@ -1,4 +1,4 @@
-package com.stylight.seo.rest;
+package com.stylight.seo.rest.client;
 
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.glassfish.jersey.apache.connector.ApacheClientProperties;
