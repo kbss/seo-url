@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UrlUtilsTest {
 
@@ -23,13 +24,13 @@ public class UrlUtilsTest {
     @Test
     public void testPrettyUrlSplit() {
         List<String> expectedResult = new ArrayList<>() {{
-            add("/products");
-            add("brand=4756");
+            add("/Crocs/Low-Top-Sneakers/");
             add("tag=17648");
         }};
-        List<String> urlParts = UrlUtils.splitParametrizedUrl("/products?brand=4756&tag=17648");
+        List<String> urlParts = UrlUtils.splitParametrizedUrl(expectedResult.stream().collect(Collectors.joining("?")) + "&");
         assertEquals(expectedResult, urlParts);
     }
+
 
     private void assertEquals(List<String> expectedResult, List<String> urlParts) {
         for (int i = 0; i < expectedResult.size(); i++) {

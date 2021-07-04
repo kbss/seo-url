@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-//TODO: test
 public class UrlUtils {
 
     public static final String QUERY_SEPARATOR = "&";
