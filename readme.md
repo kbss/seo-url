@@ -1,8 +1,10 @@
 #### Preamble:
 
-Neo4j would ideally fit this task.
+A better solution will be to redesign the system, so URL could describe itself without the need to hold URLs mapping.
 
-I'm assuming that you're expecting an in-memory solution with the custom data structure.
+If look from the requirements perspective, Neo4j would ideally fit this task.
+
+But I'm assuming that you're expecting in-memory solution with the custom data structure.
 
 ### Requirements
 
@@ -56,18 +58,18 @@ gradlew clean test
 
 > build/reports/jacoco/test/html/jacoco-sessions.html
 
-### 2. Run application in docker container
+### 6. Run application in docker container
 
-#### Prerequisites:
+#### Required:
 
-Make sure that Docker is installed.
+* Docker
 
 #### Build application container image:
 
-* Build application:
+* Build application (without tests):
 
 ```shell
-gradlew clean build
+gradlew clean build -x test
 ```
 
 * Build image:
@@ -78,9 +80,17 @@ docker build -t seo-url-app .
 
 #### Start application container:
 
-```
+```shell
 docker run -dp 8080:8080 seo-url-app .
 ```
+
+Watch logs:
+
+```shell
+docker logs <CONTAINER_ID> -f
+```
+
+* where <CONTAINER_ID> - container ID from the previous command
 
 ## Design
 
@@ -90,7 +100,7 @@ According to requirements assuming that data should be loaded in memory. The bes
 1. Build trees for key and value
 
 1. To do that we have to split url to a parts
-   - Query separator is the best to match for this
+   - Query separator is the best to match for this.
    ```
    
    Initial url:    /products?gender=female&tag=123
@@ -98,8 +108,6 @@ According to requirements assuming that data should be loaded in memory. The bes
    Tree build from initial url:
    
    products
-     |
-   gender
      |
    gender=female
      |
@@ -167,6 +175,6 @@ Redis is a good solution.
 
 The total amount of memory needed: 9Gb per instance.
 
-P.S:
+#### Test data:
 
-Code includes 50K Generated URL pair
+Code includes 50K Generated URL pairs.
